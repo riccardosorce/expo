@@ -1,0 +1,19 @@
+cnx = mysql.connector.connect(user="kxqbuwjp_expo", password="J9zjo4e7", host="cyclops.hkdns.host", database="kxqbuwjp_expo")
+cursor = cnx.cursor()
+
+# Get companyname, companynreg by user email
+get_company_data = """
+SELECT companyname, regnumber FROM reg WHERE email = %s
+"""
+cursor.execute(get_company_data, ["lennert@xponento.co.za"])
+(companyname, companynreg) = cursor.fetchall()[0]
+
+# Get all financial data for this company
+get_financial_data = """
+SELECT * FROM fin1 WHERE companyname = %s AND companynreg = %s
+"""
+cursor.execute(get_financial_data, [companyname, companynreg])
+data = cursor.fetchall()
+
+# The column names for this data: 
+cols = [col[0] for col in cursor.description]
